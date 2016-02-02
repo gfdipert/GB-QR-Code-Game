@@ -18,4 +18,5 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^qrcodegame/new/$', views.qr_code_game_new, name='qr_code_game_new'),
 ]
