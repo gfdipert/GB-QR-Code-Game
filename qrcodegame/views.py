@@ -1,3 +1,5 @@
+from django.conf.urls import url
+from . import views
 from .forms import QRCode
 
 def qr_code_game_new(request):
