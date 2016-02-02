@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from . import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^qrcodegame/new/$', views.qr_code_game_new, name='qr_code_game_new'),
+    url(r'^qrcodegame/$', views.qr_code_game_new, name='qr_code_game_new'),
 ]
