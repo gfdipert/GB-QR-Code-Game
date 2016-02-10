@@ -3,7 +3,44 @@
 {% block content %}
     <h1>New game</h1>
     <form method="POST" class="post-form">{% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="save btn btn-default">Save</button>
+
+    	{{form.guide_id.errors}}
+    	{{form.guide_id.label_tag}}
+    	{{form.guide_id}}
+
+        {{form.page_title.errors}}
+    	{{form.page_title.label_tag}}
+    	{{form.page_title}}
+
+        {{form.phrase.errors}}
+    	{{form.phrase.label_tag}}
+    	{{form.phrase}}
+
+        {{form.message_title.errors}}
+    	{{form.message_title.label_tag}}
+    	{{form.message_title}}
+
+    	{{form.message.errors}}
+    	{{form.message.label_tag}}
+    	{{form.message}}
+        
+        {{form.completedurl.errors}}
+    	{{form.completedurl.label_tag}}
+    	{{form.completedurl}}
+
+        {{form.completedtext.errors}}
+    	{{form.completedtext.label_tag}}
+    	{{form.completedtext}}
+
+    	{{form.storagekey.errors}}
+    	{{form.storagekey.label_tag}}
+    	{{form.storagekey}}
+
+    	{{form.html.errors}}
+    	{{form.html.label_tag}}
+    	{{form.html}}
+
+		<button type="submit" class="save btn btn-default">Submit</button>
     </form>
 {% endblock %}
+
