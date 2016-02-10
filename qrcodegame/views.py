@@ -4,13 +4,14 @@ import urllib
 from .forms import QRCode
 
 
-def qr_code_game_new(request):
-    form = QRCode()
-    if form.is_valid():
-    	return render(request, 'qrcodegame/game_edit.html', {'form': form})
-    else:
-    	form=QRCode()
-    return render(request, 'qrcodegame/game_edit.html', {'form': form})
+def qr_code_game_new(request): 
+	if request.method == 'POST':
+		form = QRCode(data=request.POST)
+		if form.is_valid():
+			return render(request, 'qrcodegame/game_edit.html', {'form': form})
+	else:
+		form=QRCode()
+	return render(request, 'qrcodegame/game_edit.html', {'form': form})
 
 def submit(request):
 	#grab values from form

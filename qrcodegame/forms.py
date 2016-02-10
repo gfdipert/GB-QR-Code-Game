@@ -16,6 +16,9 @@ class QRCode(forms.Form):
 		cleaned_data = super(QRCode, self).clean()
 		completedurl = cleaned_data.get('completedurl')
 		completedtext = cleaned_data.get('completedtext')
-		msg = "shit broke"
-		if "maude" not in completedurl:
-			 self.add_error('completedurl', msg)
+		msg = "Completed URL and Completed text must both be filled out"
+
+		if (len(completedtext) is 0 and len(completedurl) is not 0 or len(completedurl) is 0 and len(completedtext) is not 0):
+			self.add_error('completedurl', msg)
+			self.add_error('completedtext', msg)
+		return cleaned_data
