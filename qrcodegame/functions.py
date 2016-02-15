@@ -1,11 +1,21 @@
 from qrcode.main import QRCode
 import urllib
 import os
+from django.http import HttpResponse
+from shutil import make_archive
+from django.core.files import File
 
-def createqrstuff(form):
+def createqrcodes(form):
 	form = form
 	outputQRCodes(form)
 	outputHTML(form)
+	return zip_view(outfolder)
+
+
+def zip_view(outfolder):
+    file_path = outfolder
+    path_to_zip = make_archive(file_path,"zip",file_path)
+    return path_to_zip
 
 def getoutfolder(guide_id):
 	global outfolder
