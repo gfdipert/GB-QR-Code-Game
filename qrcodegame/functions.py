@@ -8,13 +8,19 @@ def createqrstuff(form):
 	outputHTML(form)
 
 def getoutfolder(guide_id):
-	return "/tmp/qrcodegame/" + guide_id
+	global outfolder
+	outfolder = "/tmp/qrcodegame/" + guide_id
+	if not os.path.exists(outfolder):
+		result = os.makedirs(outfolder)
+		if not os.path.isdir(outfolder):
+			raise Exception("Output folder does not exist and could not be created.")
+	return outfolder
 
 def outputQRCodes(form):
 	"""Create QR codes for phrase pieces."""
 	delimiter = '/'
-	components = form.phrase.value.split(delimiter)
-	title = urllib.quote(form.fields['page_title'])
+	components = form['phrase'].value().split(delimiter)
+	title = urllib.quote(form['page_title'].value())
 	position = 0
 	global count
 	count = 0
@@ -24,16 +30,16 @@ def outputQRCodes(form):
 		letters = component.lstrip()
 		prepend = len(component) - len(letters)
 		letters = letters.rstrip()
-		url_string = format_str % (form.fields['guide_id'], form.fields['title'], form.fields['html'], prepend+position, urllib.quote(urllib.quote(letters)))
+		url_string = format_str % (form['guide_id'].value(), form['page_title'].value(), form['html'].value(), prepend+position, urllib.quote(urllib.quote(letters)))
 		print "Generating QR code for URL: %s" % url_string
 		position += len(component) # Use the len including spaces so we skip the proper amt
-		makeQR(url_string, "%s_%s.png"%(count+1,letters), args)
+		makeQR(url_string, "%s_%s.png"%(count+1,letters), form)
 		count = count + 1
-	makeQR("http://guidebook.com/guide/%s/web/?title=%s&dataSource=%s%%3Freset%%3Dtrue" % (form.fields['guide_id'], form.fields['title'], form.fields['html']), 'reset.png', form)
+	makeQR("http://guidebook.com/guide/%s/web/?title=%s&dataSource=%s%%3Freset%%3Dtrue" % (form['guide_id'].value(), form['page_title'].value(), form['html'].value()), 'reset.png', form)
 
 def makeQR(url, filename, form):
 	"""Create and save QR code for phrase piece."""
-	outfolder = getoutfolder(form.fields['guide_id'])
+	outfolder = getoutfolder(form['guide_id'].value())
 	qr = QRCode()
 	qr.add_data(url)
 	im = qr.make_image()
@@ -47,14 +53,14 @@ def outputHTML(form):
 	
 	"""
 	delimiter = '/'
-	phrase = form.fields['phrase'].replace(delimiter,"")
+	phrase = form['phrase'].value().replace(delimiter,"")
 	spaces = ""
 	for letter in phrase:
 		if letter != " ":
 			letter = "_"
 		spaces+=letter
 	# Add seperate HTML file text if they want a form to appear after phrase is completed
-	if form.fields['completedurl'] != 'NONE':
+	if form['completedurl'].value() != 'NONE':
 		html = """	<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 				<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 				<style>
@@ -185,13 +191,13 @@ def outputHTML(form):
 				</script>
 		</body></html>
 	""" % {
-		"storage_key":form.storagekey if form.storagekey else "guide_%s_phrase" % form.guide_id,
+		"storage_key":form['storagekey'].value() if form['storagekey'].value() else "guide_%s_phrase" % form['guide_id'].value(),
 		"spaces":spaces,
-		"count":form.count,
-		"message":form.message,
-		"message_title":form.message_title,
-		"completedurl":form.completedurl,
-		"completedtext":form.completedtext
+		"count":count,
+		"message":form['message'].value(),
+		"message_title":form['message_title'].value(),
+		"completedurl":form['completedurl'].value(),
+		"completedtext":form['completedtext'].value()
 		}
 	else:
 		html = """	<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -314,13 +320,13 @@ def outputHTML(form):
 				</script>
 		</body></html>
 	""" % {
-		"storage_key":form.fields['storagekey'] if form.fields['storagekey'] else "guide_%s_phrase" % form.fields['guide_id'],
+		"storage_key":form['storagekey'].value() if form['storagekey'].value() else "guide_%s_phrase" % form['guide_id'].value(),
 		"spaces":spaces,
 		"count":count,
-		"message":form.fields['message'],
-		"message_title":form.fields['message_title'],
+		"message":form['message'].value(),
+		"message_title":form['message_title'].value(),
 		}
-	f = open(outfolder+"/"+form.html, "w")
+	f = open(outfolder+"/"+form['html'].value(), "w")
 	f.write(html)
 	f.close()
 

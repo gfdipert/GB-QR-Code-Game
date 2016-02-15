@@ -2,7 +2,7 @@ from django.shortcuts import render
 from qrcode.main import QRCode
 import urllib
 from .forms import QRCode
-from functions import createqrstuff
+from .functions import createqrstuff
 
 
 def qr_code_game_new(request): 
