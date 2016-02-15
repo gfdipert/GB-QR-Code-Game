@@ -9,7 +9,7 @@ class QRCode(forms.Form):
 	message = forms.CharField(label="Message to display under the phrase")
 	completedurl = forms.URLField(label="Turns on form that user can submit information to once qr game is completed.",required=False)
 	completedtext = forms.CharField(label="Customizable Hyperlink text for completed phrase link.",required=False)
-	storagekey = forms.CharField(label="Storage key",initial='guide__GuideID__')
+	storagekey = forms.CharField(label="Storage key",help_text="Make with the following format: guide__[add Guide ID here]__")
 	html = forms.CharField(label="HTML File Name",initial='qrgame.html')
 
 	def clean(self):
